@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palmer AI B2B Platform Demo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .chat-demo {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .chat-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .chat-button {
+            background: #4a90e2;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .chat-button:hover {
+            background: #357abd;
+        }
+        .response-area {
+            background: #fff;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 100px;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .feature {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Palmer AI B2B Platform</h1>
+            <div style="color: #666; font-size: 1.2em;">Conversational Product Intelligence for Distributors</div>
+            <div style="color: #888; margin-top: 10px;">Powered by Claude Sonnet 4 • $7.6T Market Opportunity</div>
+        </div>
+
+        <div style="background: #e3f2fd; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+            <h3>💬 Try Conversing with Palmer AI</h3>
+            <div class="chat-demo">
+                <input type="text" class="chat-input" id="chatInput" 
+                       placeholder="Ask Palmer anything... 'I have an Excel file with 500 HVAC products but terrible descriptions'">
+                <button class="chat-button" onclick="testPalmerChat()">Chat with Palmer</button>
+                <div class="response-area" id="responseArea">
+                    <div style="color: #888; text-align: center; padding: 20px;">
+                        Palmer AI responses will appear here...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #f3e5f5; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+            <h3>🎯 What Palmer AI Can Do</h3>
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">📊</div>
+                    <h4>File Upload</h4>
+                    <p>Upload Excel/CSV files and get AI-enhanced product catalogs instantly</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💬</div>
+                    <h4>Natural Chat</h4>
+                    <p>Chat naturally about your product needs and get strategic guidance</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔗</div>
+                    <h4>Website Extraction</h4>
+                    <p>Extract complete product catalogs from manufacturer websites</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🎯</div>
+                    <h4>B2B Optimization</h4>
+                    <p>Optimize descriptions for specific customer types and industries</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fff3e0; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+            <h3>💡 Example Conversations</h3>
+            <div style="margin: 15px 0;">
+                <strong>User:</strong> "I have 500 HVAC products with boring descriptions"<br>
+                <strong>Palmer:</strong> "I'll enhance those for HVAC contractors! Upload your file and I'll add technical specs, efficiency ratings, and contractor benefits."
+            </div>
+            <div style="margin: 15px 0;">
+                <strong>User:</strong> "Extract from Carrier, Trane, and Lennox websites"<br>
+                <strong>Palmer:</strong> "Perfect! I'll extract from all three manufacturers and create a comprehensive HVAC catalog with consistent, high-quality descriptions."
+            </div>
+        </div>
+
+        <div style="text-align: center; background: #e8f5e8; padding: 20px; border-radius: 10px;">
+            <h3>🚀 Ready to Transform Your Product Intelligence?</h3>
+            <p><strong>API Endpoints:</strong></p>
+            <div style="font-family: monospace; background: #333; color: #fff; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                POST /palmer/chat - Natural language conversations<br>
+                POST /palmer/upload-and-chat - File upload + chat<br>
+                POST /b2b/manufacturers/analyze - Website analysis
+            </div>
+            <p style="margin-top: 20px;">💜 Built with love in memory of Mia Palmer Barreto</p>
+        </div>
+    </div>
+
+    <script>
+        async function testPalmerChat() {
+            const input = document.getElementById('chatInput');
+            const responseArea = document.getElementById('responseArea');
+            const message = input.value.trim();
+            
+            if (!message) {
+                alert('Please enter a message!');
+                return;
+            }
+            
+            responseArea.innerHTML = '<div style="text-align: center; color: #666;">🤖 Palmer is thinking...</div>';
+            
+            try {
+                const response = await fetch('/test-palmer', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ message: message })
+                });
+                
+                const result = await response.json();
+                
+                responseArea.innerHTML = `
+                    <div style="margin-bottom: 15px;">
+                        <strong>You:</strong> ${result.user_message}
+                    </div>
+                    <div style="background: #f3e5f5; padding: 15px; border-radius: 8px;">
+                        <strong>🤖 Palmer AI:</strong> ${result.palmer_response}
+                    </div>
+                `;
+                
+                input.value = '';
+                
+            } catch (error) {
+                responseArea.innerHTML = `
+                    <div style="color: #d32f2f; padding: 15px; background: #ffebee; border-radius: 8px;">
+                        <strong>Error:</strong> Could not connect to Palmer AI. Make sure server is running at http://localhost:8000
+                    </div>
+                `;
+            }
+        }
+        
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') testPalmerChat();
+        });
+    </script>
+</body>
+</html>
