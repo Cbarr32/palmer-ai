@@ -243,3 +243,26 @@ node_modules/
 frontend/node_modules/
 frontend/.next/
 frontend/.env.local
+
+# Palmer AI Sensitive Data
+.env
+.env.*
+config/production.py
+config/secrets.py
+data/customer_*
+data/proprietary_*
+scripts/deploy_prod.sh
+*_PRIVATE.*
+*.key
+*.pem
+
+# Business sensitive
+pricing_strategy.md
+customer_list.csv
+revenue_reports/
+competitive_analysis/
+
+# API Keys and Credentials  
+anthropic_api_key.txt
+openai_api_key.txt
+stripe_keys.txt
