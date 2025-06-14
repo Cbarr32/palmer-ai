@@ -193,13 +193,11 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 # Frontend
-frontend/
 node_modules/
 .next/
 *.node
 
 # Frontend and Node.js
-frontend/
 node_modules/
 .next/
 *.node
@@ -242,3 +240,6 @@ node_modules/
 node_modules/
 .env.local
 *.log
+frontend/node_modules/
+frontend/.next/
+frontend/.env.local
