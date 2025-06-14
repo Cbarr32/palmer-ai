@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Send, Upload, Users, BarChart3, Settings, Zap, 
@@ -116,28 +114,19 @@ export default function PalmerAIRedesigned() {
     setInput('');
     setIsProcessing(true);
 
-    // Simulate AI processing with realistic response
+    // Simulate AI processing (replace with actual API call)
     setTimeout(() => {
-      const responses = [
-        "I'll help you transform your product intelligence! Based on your request, I can analyze catalogs, generate contractor-focused descriptions, and provide competitive insights. What specific challenge would you like to tackle first?",
-        "Great question! For distributors like you, I focus on turning technical specs into compelling value propositions that contractors actually want to buy. Would you like to upload a catalog or explore our industry templates?",
-        "Perfect! I can help optimize your product descriptions for HVAC, plumbing, or industrial markets. My AI analyzes your catalog and creates descriptions that speak directly to contractors' pain points and profit opportunities.",
-        "Excellent choice! Let me guide you through enhancing your product intelligence. I can process Excel/CSV files, extract manufacturer data, or help you craft descriptions that increase order values and reduce support calls."
-      ];
-
-      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-      
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
-        content: randomResponse,
+        content: "I'll help you with that! Based on your request, I can analyze your catalog and provide insights tailored for your distributor business. Would you like to upload a file or shall I guide you through specific product intelligence workflows?",
         role: 'assistant',
         timestamp: new Date(),
-        confidence: 0.92 + Math.random() * 0.06, // 92-98% confidence
+        confidence: 0.94,
         type: 'insight'
       };
       setMessages(prev => [...prev, aiResponse]);
       setIsProcessing(false);
-    }, 1200 + Math.random() * 800); // Realistic processing time
+    }, 1500);
   };
 
   const handleTemplateSelect = (templateId: string) => {
@@ -148,27 +137,11 @@ export default function PalmerAIRedesigned() {
     if (template) {
       setMessages([{
         id: '1',
-        content: `Perfect! I've prepared the ${template.title} workflow for you. This typically takes about ${template.estimatedTime} and will help you ${template.description.toLowerCase()}. 
-
-I'll guide you through:
-• Analyzing your current product descriptions
-• Identifying optimization opportunities  
-• Generating contractor-focused language
-• Highlighting profit-driving features
-
-Ready to transform your catalog?`,
+        content: `I've prepared the ${template.title} workflow for you. This typically takes about ${template.estimatedTime} and will help you ${template.description.toLowerCase()}. Ready to start?`,
         role: 'assistant',
         timestamp: new Date(),
-        type: 'template',
-        confidence: 0.96
+        type: 'template'
       }]);
-    }
-  };
-
-  const handleQuickAction = (action: string) => {
-    setInput(action);
-    if (currentView !== 'chat') {
-      setCurrentView('chat');
     }
   };
 
@@ -191,10 +164,6 @@ Ready to transform your catalog?`,
             </div>
             
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 text-sm">
-                <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: theme.colors.success }}></div>
-                <span style={{ color: theme.colors.textMuted }}>Claude Sonnet 4 Active</span>
-              </div>
               <button className="p-2 rounded-lg hover:opacity-80 transition-opacity" style={{ backgroundColor: theme.colors.elevated }}>
                 <Users className="w-5 h-5" />
               </button>
@@ -219,7 +188,7 @@ Ready to transform your catalog?`,
               Turn boring catalogs into compelling sales tools in minutes, not hours.
             </p>
             
-            <div className="flex items-center justify-center gap-4 flex-wrap">
+            <div className="flex items-center justify-center gap-4">
               <button 
                 onClick={() => setCurrentView('chat')}
                 className="px-8 py-4 rounded-xl font-semibold text-lg transition-all transform hover:scale-105 flex items-center gap-2"
@@ -228,11 +197,8 @@ Ready to transform your catalog?`,
                 <MessageCircle className="w-5 h-5" />
                 Start Conversation
               </button>
-              <button 
-                onClick={() => setCurrentView('chat')}
-                className="px-8 py-4 rounded-xl font-semibold text-lg border-2 transition-all hover:opacity-80 flex items-center gap-2" 
-                style={{ borderColor: theme.colors.border, color: theme.colors.textSecondary }}
-              >
+              <button className="px-8 py-4 rounded-xl font-semibold text-lg border-2 transition-all hover:opacity-80 flex items-center gap-2" 
+                style={{ borderColor: theme.colors.border, color: theme.colors.textSecondary }}>
                 <Upload className="w-5 h-5" />
                 Upload Catalog
               </button>
@@ -289,11 +255,6 @@ Ready to transform your catalog?`,
                 <p style={{ color: theme.colors.textMuted }}>Distributors Trust Us</p>
               </div>
             </div>
-            
-            <p className="text-sm" style={{ color: theme.colors.textMuted }}>
-              "Palmer AI transformed our product descriptions and increased our conversion rate by 40%" 
-              <span className="block mt-1 font-semibold">- Regional HVAC Distributor</span>
-            </p>
           </div>
         </div>
       </div>
@@ -308,7 +269,7 @@ Ready to transform your catalog?`,
         <div className="p-4 border-b" style={{ borderColor: theme.colors.border }}>
           <button 
             onClick={() => setCurrentView('welcome')}
-            className="flex items-center gap-2 text-sm hover:opacity-80 transition-opacity"
+            className="flex items-center gap-2 text-sm hover:opacity-80"
             style={{ color: theme.colors.textMuted }}
           >
             <ArrowRight className="w-4 h-4 rotate-180" />
@@ -322,8 +283,8 @@ Ready to transform your catalog?`,
             {quickActions.map((action, i) => (
               <button
                 key={i}
-                onClick={() => handleQuickAction(action)}
-                className="w-full text-left p-3 rounded-lg text-sm transition-all hover:scale-105"
+                onClick={() => setInput(action)}
+                className="w-full text-left p-2 rounded-lg text-sm transition-all hover:scale-105"
                 style={{ backgroundColor: theme.colors.elevated, color: theme.colors.textMuted }}
               >
                 {action}
@@ -333,19 +294,11 @@ Ready to transform your catalog?`,
         </div>
         
         <div className="mt-auto p-4 border-t" style={{ borderColor: theme.colors.border }}>
-          <button className="w-full flex items-center gap-2 p-3 rounded-lg transition-all hover:scale-105 mb-3" 
+          <button className="w-full flex items-center gap-2 p-3 rounded-lg transition-all hover:scale-105" 
             style={{ backgroundColor: theme.colors.primary, color: theme.colors.base }}>
             <Share2 className="w-4 h-4" />
             <span className="font-semibold">Invite Team</span>
           </button>
-          
-          <div className="text-xs" style={{ color: theme.colors.textMuted }}>
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: theme.colors.success }}></div>
-              Backend Connected
-            </div>
-            <div>Claude Sonnet 4 Active</div>
-          </div>
         </div>
       </div>
 
@@ -378,28 +331,6 @@ Ready to transform your catalog?`,
               <Lightbulb className="w-12 h-12 mx-auto mb-4" style={{ color: theme.colors.accent }} />
               <h3 className="text-lg font-semibold mb-2">Ready to transform your product intelligence?</h3>
               <p style={{ color: theme.colors.textMuted }}>Ask me anything about your products, catalogs, or industry insights.</p>
-              
-              <div className="mt-8 grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-                <button 
-                  onClick={() => handleQuickAction("Upload my HVAC catalog for optimization")}
-                  className="p-4 rounded-xl text-left transition-all hover:scale-105"
-                  style={{ backgroundColor: theme.colors.surface, borderColor: theme.colors.border }}
-                >
-                  <Upload className="w-6 h-6 mb-2" style={{ color: theme.colors.primary }} />
-                  <div className="font-semibold mb-1">Upload Catalog</div>
-                  <div className="text-sm" style={{ color: theme.colors.textMuted }}>Transform your product descriptions</div>
-                </button>
-                
-                <button 
-                  onClick={() => handleQuickAction("Show me competitor pricing analysis")}
-                  className="p-4 rounded-xl text-left transition-all hover:scale-105"
-                  style={{ backgroundColor: theme.colors.surface, borderColor: theme.colors.border }}
-                >
-                  <TrendingUp className="w-6 h-6 mb-2" style={{ color: theme.colors.secondary }} />
-                  <div className="font-semibold mb-1">Market Analysis</div>
-                  <div className="text-sm" style={{ color: theme.colors.textMuted }}>Compare with competitors</div>
-                </button>
-              </div>
             </div>
           ) : (
             messages.map((message) => (
@@ -418,9 +349,9 @@ Ready to transform your catalog?`,
                   backgroundColor: message.role === 'user' ? theme.colors.primary : theme.colors.surface,
                   color: message.role === 'user' ? theme.colors.base : theme.colors.textPrimary
                 }}>
-                  <p className="leading-relaxed whitespace-pre-wrap">{message.content}</p>
+                  <p className="leading-relaxed">{message.content}</p>
                   
-                  {message.confidence && message.role === 'assistant' && (
+                  {message.confidence && (
                     <div className="mt-3 pt-3 border-t" style={{ borderColor: theme.colors.border }}>
                       <div className="flex items-center justify-between text-xs" style={{ color: theme.colors.textMuted }}>
                         <span>Confidence: {Math.round(message.confidence * 100)}%</span>
@@ -473,6 +404,7 @@ Ready to transform your catalog?`,
                   backgroundColor: theme.colors.elevated, 
                   color: theme.colors.textPrimary,
                   border: `1px solid ${theme.colors.border}`,
+                  focusRingColor: theme.colors.primary
                 }}
                 disabled={isProcessing}
               />
