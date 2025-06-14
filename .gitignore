@@ -236,3 +236,9 @@ security_report.json
 .pytest_cache/
 *.pyc
 __pycache__/
+node_modules/
+.env.local
+*.log
+node_modules/
+.env.local
+*.log
