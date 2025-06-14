@@ -1,11 +1,25 @@
-Palmer AI - Proprietary License
+Palmer AI - Dual License
 
-Copyright (c) 2024 Chris Barr
+Copyright (c) 2024 Chris Barr - All Rights Reserved
 
-This software is proprietary and confidential. 
-Viewing source code is permitted for educational purposes only.
+1. VIEWING LICENSE (Public Repository)
+   - You may VIEW this code for educational purposes
+   - You may learn techniques and approaches
+   - You may be inspired to build your own solutions
+   
+2. COMMERCIAL LICENSE (Requires Agreement)
+   - NO commercial use without written permission  
+   - NO copying for competitive products
+   - NO redistribution of any kind
+   - Contact: chris.barrp@gmail.com for licensing
 
-Commercial use, modification, or distribution requires written permission.
-Contact: chris.barrp@gmail.com
+3. PROTECTED COMPONENTS
+   The following are trade secrets and proprietary:
+   - Prompt engineering systems
+   - MPB scoring algorithms  
+   - B2B optimization strategies
+   - Multi-agent architectures
+   
+Violation of this license = legal action. We monitor for copies.
 
-Building in public ≠ free for commercial use!
+Building in public ≠ Open Source. This is proprietary software.

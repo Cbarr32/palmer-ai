@@ -266,3 +266,50 @@ competitive_analysis/
 anthropic_api_key.txt
 openai_api_key.txt
 stripe_keys.txt
+
+# Palmer AI Core IP Protection
+private_core/
+private_modules/
+**/elite_prompting.py
+**/proprietary_*.py
+**/secret_*.py
+
+# Algorithmic IP
+**/scoring_weights.json
+**/optimization_rules.py
+algorithms/private/
+
+# Business Intelligence  
+customer_insights/
+revenue_optimization/
+competitive_analysis/
+market_intelligence/
+
+# Prompt Engineering Secrets
+prompts/proprietary/
+prompts/*_elite.py
+prompt_templates/private/
+
+# Strategic Assets
+strategy_docs/
+business_plans/
+investor_decks/
+financial_models/
+
+# Customer Data
+customers/
+user_data/
+analytics_reports/
+
+# API Keys and Configs
+.env*
+config/production/
+config/secrets/
+*.key
+*.pem
+*_credentials.json
+
+# Development Secrets
+.ideas/secret_features/
+experiments/proprietary/
+research/unpublished/
