@@ -225,3 +225,14 @@ complete_build_commands.sh
 .env.production
 *.key
 *api_key*
+
+# Production files
+backend_production.log
+frontend_production.log
+htmlcov/
+.coverage
+test_report.html
+security_report.json
+.pytest_cache/
+*.pyc
+__pycache__/
