@@ -1,69 +1,96 @@
-"""Palmer AI Product Description Optimizer Server"""
+"""
+Palmer AI FastAPI Server
+Production-ready B2B intelligence platform
+"""
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, HTMLResponse
-from contextlib import asynccontextmanager
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
+import os
+from datetime import datetime
 
-from .config import settings
-from .utils.logger import get_logger, setup_logging
-from .api.endpoints.b2b_distributors import router as b2b_router
-from .api.endpoints.conversational_b2b import router as palmer_router
-from .api.endpoints.product_descriptions import router as products_router
+from src.palmer_ai.api import analyze
+from src.palmer_ai.core.logger import get_logger
+from src.palmer_ai.core.websocket import ws_manager
 
-# Setup logging
-setup_logging()
 logger = get_logger(__name__)
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """Manage application lifecycle"""
-    logger.info(f"Starting Palmer AI Product Description Optimizer")
-    logger.info(f"Version: {settings.app_version}")
-    print("🤖 Palmer AI - Ready to optimize product descriptions!")
-    yield
-    logger.info("Shutting down Palmer AI")
 
 # Create FastAPI app
 app = FastAPI(
-    title="Palmer AI Product Description Optimizer",
-    description="Transform product data into descriptions that sell",
-    version=settings.app_version,
-    lifespan=lifespan
+    title="Palmer AI",
+    description="B2B Intelligence Platform for Industrial Distributors",
+    version="1.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc"
 )
 
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for development
+    allow_origins=["http://localhost:3000"],  # Add your domains
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Include routers
-app.include_router(b2b_router)
-app.include_router(palmer_router)
-app.include_router(products_router)
+# Mount static files
+if os.path.exists("frontend/out"):
+    app.mount("/static", StaticFiles(directory="frontend/out"), name="static")
 
-@app.get("/")
-async def root():
-    """Root endpoint"""
-    return {
-        "message": "Palmer AI Product Description Optimizer",
-        "description": "Transform boring product data into compelling descriptions",
-        "endpoints": {
-            "optimize_single": "/api/v1/products/optimize",
-            "upload_excel": "/api/v1/products/upload-excel",
-            "chat": "/palmer/chat",
-            "docs": "/docs"
-        }
-    }
+# Include routers
+app.include_router(analyze.router)
+
+# WebSocket endpoint
+@app.websocket("/ws/{client_id}")
+async def websocket_endpoint(websocket, client_id: str):
+    await ws_manager.connect(websocket, client_id)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            # Handle WebSocket messages
+    except:
+        ws_manager.disconnect(client_id)
 
 @app.get("/health")
-async def health():
+async def health_check():
     """Health check endpoint"""
     return {
         "status": "healthy",
-        "service": "Palmer AI",
-        "version": settings.app_version
+        "timestamp": datetime.utcnow().isoformat(),
+        "version": "1.0.0",
+        "service": "Palmer AI"
     }
+
+@app.get("/api/v1/status")
+async def api_status():
+    """API status endpoint"""
+    return {
+        "api_version": "v1",
+        "endpoints_available": [
+            "/api/v1/analyze/distributor",
+            "/api/v1/analyze/status/{job_id}",
+            "/api/v1/analyze/history"
+        ],
+        "features": {
+            "quick_analysis": True,
+            "deep_analysis": True,
+            "competitor_comparison": True,
+            "real_time_updates": True
+        }
+    }
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.error(f"Global exception: {str(exc)}")
+    return JSONResponse(
+        status_code=500,
+        content={
+            "detail": "Internal server error",
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    )
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
