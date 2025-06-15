@@ -1,0 +1,24 @@
+{
+  "project": "Palmer AI",
+  "vision": "Beat $30K Klue with $97/month solution",
+  "current_focus": "3-message conversion hook",
+  "tech_stack": {
+    "backend": ["Python 3.11+", "FastAPI", "Anthropic Claude"],
+    "frontend": ["Next.js 14", "TypeScript", "Tailwind"],
+    "database": ["PostgreSQL", "SQLite"],
+    "agents": ["Reconnaissance", "Competitive", "Conversational", "Product"]
+  },
+  "priorities": [
+    "Company intelligence from URL",
+    "3-message conversion flow",
+    "White-label API",
+    "Bulk analysis",
+    "Real-time monitoring"
+  ],
+  "constraints": {
+    "team_size": 1,
+    "maintenance": "Must be manageable by Chris alone",
+    "performance": "< 2 second response time",
+    "reliability": "99.9% uptime target"
+  }
+}

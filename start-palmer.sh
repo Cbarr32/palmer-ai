@@ -1,38 +1,42 @@
 #!/bin/bash
+# Palmer AI Quick Start Script
 
-echo "🎨 Starting Palmer AI Development Environment"
-echo "============================================"
+echo "🚀 Starting Palmer AI with Claude Sonnet 4..."
 
-# Kill any existing processes
-pkill -f "next dev" 2>/dev/null || true
-pkill -f "uvicorn" 2>/dev/null || true
+# Check for virtual environment
+if [ ! -d ".venv" ]; then
+    echo "❌ No virtual environment found!"
+    echo "Run: python -m venv .venv"
+    exit 1
+fi
 
-# Start backend
-echo "🔧 Starting Palmer AI Backend..."
-python -m uvicorn src.palmer_ai.server:app --reload --host 0.0.0.0 --port 8000 &
-BACKEND_PID=$!
+# Activate it
+source .venv/Scripts/activate || source .venv/bin/activate
 
-# Wait for backend
-sleep 3
+# Set Python path
+export PYTHONPATH="${PWD}/src:${PWD}:${PYTHONPATH}"
 
-# Start frontend
-echo "🎨 Starting Palmer AI Frontend..."
-cd frontend
-npm run dev &
-FRONTEND_PID=$!
+# Verify API key
+if ! grep -q "ANTHROPIC_API_KEY=sk-" .env; then
+    echo "❌ No Anthropic API key in .env!"
+    exit 1
+else
+    echo "✅ Anthropic API key found"
+fi
 
-# Wait for frontend
-sleep 5
+# Redis check (not required)
+echo "📝 Note: Redis not required for Palmer AI"
+echo "   Using in-memory caching for development"
 
+# Start the server
 echo ""
-echo "🎉 Palmer AI Development Environment Ready!"
-echo "=========================================="
-echo "🎨 Frontend: http://localhost:3000"
-echo "🔧 Backend:  http://localhost:8000"
+echo "🌐 Starting Palmer AI on http://localhost:8000"
 echo "📚 API Docs: http://localhost:8000/docs"
+echo "🎯 Frontend: http://localhost:3000 (if running)"
 echo ""
-echo "Press Ctrl+C to stop all services"
 
-# Wait for user interrupt
-trap 'kill $BACKEND_PID $FRONTEND_PID; exit' INT
-wait
+python -m uvicorn src.palmer_ai.server:app \
+    --reload \
+    --host localhost \
+    --port 8000 \
+    --log-level info

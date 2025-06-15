@@ -1,0 +1,235 @@
+'use client'
+import { useState } from 'react'
+import { ConversionHook } from '@/components/ConversionHook'
+import { motion } from 'framer-motion'
+import { ConversionHook } from '@/components/ConversionHook'
+import { 
+import { ConversionHook } from '@/components/ConversionHook'
+  Sparkles, 
+  TrendingUp, 
+  BarChart3, 
+  Upload,
+  ArrowRight,
+  Play,
+  Clock,
+  Building2,
+  ChevronRight
+} from 'lucide-react'
+import AnalysisModal from '@/components/AnalysisModal'
+import { ConversionHook } from '@/components/ConversionHook'
+
+export default function Home() {
+  const [showAnalysis, setShowAnalysis] = useState(false)
+  const [recentAnalyses] = useState([
+    {
+      id: 1,
+      company: "Acme Industrial Supply",
+      score: 87,
+      date: "2 hours ago",
+      industry: "Industrial Equipment",
+      image: "🏭"
+    },
+    {
+      id: 2,
+      company: "TechFlow Solutions",
+      score: 92,
+      date: "Yesterday",
+      industry: "HVAC Systems",
+      image: "🌡️"
+    },
+    {
+      id: 3,
+      company: "BuildRight Tools",
+      score: 78,
+      date: "3 days ago",
+      industry: "Construction",
+      image: "🔨"
+    }
+  ])
+
+  const quickActions = [
+    { 
+      icon: Upload, 
+      title: "Upload Catalog", 
+      desc: "Excel or CSV files", 
+      color: "#8b5cf6",
+      bgColor: "bg-purple-900/20"
+    },
+    { 
+      icon: BarChart3, 
+      title: "View Analytics", 
+      desc: "Performance metrics", 
+      color: "#f59e0b",
+      bgColor: "bg-amber-900/20"
+    },
+    { 
+      icon: TrendingUp, 
+      title: "Market Insights", 
+      desc: "Industry trends", 
+      color: "#10b981",
+      bgColor: "bg-emerald-900/20"
+    },
+    { 
+      icon: Building2, 
+      title: "Company Profile", 
+      desc: "Manage settings", 
+      color: "#3b82f6",
+      bgColor: "bg-blue-900/20"
+    }
+  ]
+
+  return (
+    <div className="min-h-screen bg-[#121212]">
+      {/* Navigation Bar - Fixed spacing */}
+      <nav className="bg-black/40 backdrop-blur-sm border-b border-gray-800">
+        <div className="max-w-[1600px] mx-auto px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-10">
+              <h1 className="text-2xl font-bold flex items-center gap-3">
+                <span className="text-3xl">🤖</span>
+                <span className="text-white">Palmer AI</span>
+              </h1>
+              <div className="hidden md:flex items-center gap-8">
+                <a href="#" className="text-white font-medium hover:text-white/80 transition">Home</a>
+                <a href="#" className="text-gray-400 hover:text-white transition">Dashboard</a>
+                <a href="#" className="text-gray-400 hover:text-white transition">Reports</a>
+              </div>
+            </div>
+            <div className="flex items-center gap-6">
+              <button className="text-gray-400 hover:text-white transition">
+                <Clock size={22} />
+              </button>
+              <button className="text-gray-400 hover:text-white transition">
+                <Building2 size={22} />
+              </button>
+              <div className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-sm font-bold">
+                CB
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Main Content Area with proper spacing */}
+      <div className="max-w-[1600px] mx-auto">
+        {/* Hero Section with breathing room */}
+        <section className="px-8 pt-12 pb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-7xl font-bold text-white mb-4">
+              Good evening, Chris
+            </h2>
+            <p className="text-2xl text-gray-400 mb-10 max-w-3xl">
+              Transform your product catalog with AI-powered intelligence
+            </p>
+            <button 
+              onClick={() => setShowAnalysis(true)}
+              className="inline-flex items-center gap-3 bg-[#1db954] hover:bg-[#1ed760] text-black font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full transition-all transform hover:scale-105"
+            >
+              Start Analysis
+              <Sparkles size={18} />
+            </button>
+          </motion.div>
+        </section>
+
+        {/* Quick Actions with proper grid spacing */}
+        <section className="px-8 py-8">
+          <h3 className="text-2xl font-bold text-white mb-8">Quick Actions</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+            {quickActions.map((action, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="group relative bg-[#181818] hover:bg-[#282828] rounded-lg p-6 cursor-pointer transition-all duration-300"
+              >
+                <div className={`inline-flex p-3 rounded-lg ${action.bgColor} mb-4`}>
+                  <action.icon size={24} style={{ color: action.color }} />
+                </div>
+                <h4 className="text-lg font-semibold text-white mb-2">{action.title}</h4>
+                <p className="text-sm text-gray-400">{action.desc}</p>
+                <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                  <div className="w-10 h-10 bg-[#1db954] rounded-full flex items-center justify-center">
+                    <ArrowRight size={18} className="text-black" />
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* Recent Analyses with better card design */}
+        <section className="px-8 py-8">
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-2xl font-bold text-white">Recent Analyses</h3>
+            <button className="text-sm text-gray-400 hover:text-white font-medium uppercase tracking-wider transition flex items-center gap-2">
+              Show All
+              <ChevronRight size={16} />
+            </button>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {recentAnalyses.map((analysis, i) => (
+              <motion.div
+                key={analysis.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="group bg-[#181818] hover:bg-[#282828] rounded-lg p-6 cursor-pointer transition-all duration-300"
+              >
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-purple-800 rounded-lg flex items-center justify-center text-3xl">
+                    {analysis.image}
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-lg font-semibold text-white mb-1 line-clamp-1">
+                      {analysis.company}
+                    </h4>
+                    <p className="text-sm text-gray-400">{analysis.industry}</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">MPB Score</p>
+                    <p className="text-2xl font-bold text-white">{analysis.score}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-gray-400">{analysis.date}</p>
+                  </div>
+                </div>
+                
+                <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                  <div className="w-12 h-12 bg-[#1db954] rounded-full flex items-center justify-center shadow-lg">
+                    <Play size={20} className="text-black ml-1" />
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      {/* Analysis Modal */}
+      {showAnalysis && <AnalysisModal onClose={() => setShowAnalysis(false)} />}
+
+      {/* Footer with proper spacing */}
+      <footer className="mt-20 border-t border-gray-800">
+        <div className="max-w-[1600px] mx-auto px-8 py-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+            <p>© 2024 Palmer AI • Built for B2B Distributors</p>
+            <div className="flex items-center gap-2">
+              <span className="text-[#1db954]">$497/mo</span> Starter •
+              <span className="text-purple-400">$1,497/mo</span> Professional •
+              <span>Enterprise Available</span>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  )
+}

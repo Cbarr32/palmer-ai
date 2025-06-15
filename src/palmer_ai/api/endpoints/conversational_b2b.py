@@ -1,3 +1,4 @@
+from fastapi import Header
 """Conversational B2B API endpoints for flexible distributor interactions"""
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from typing import Dict, Any, List, Optional
@@ -136,3 +137,34 @@ async def quick_help(request: Dict[str, Any]) -> Dict[str, Any]:
         "palmer_response": "I'm here to help with product intelligence! Ask me about uploading files or enhancing catalogs.",
         "suggested_questions": ["How do I upload files?", "Can you enhance descriptions?"]
     }
+
+# Add this new endpoint to the existing file
+
+@router.post("/analyze-with-hook")
+async def analyze_with_conversion_hook(
+    request: Dict[str, Any],
+    x_forwarded_for: Optional[str] = Header(None),
+    user_agent: Optional[str] = Header(None)
+):
+    """Analyze company with 3-message conversion hook"""
+    try:
+        # Generate session ID from IP + user agent
+        identifier = f"{x_forwarded_for or 'unknown'}:{user_agent or 'unknown'}"
+        session_id = conversion_hook.get_session_id(identifier)
+        
+        logger.info(f"Conversion hook request from session: {session_id}")
+        
+        # Analyze with hook
+        result = await palmer_core.analyze_with_hook(
+            company_data=request,
+            session_id=session_id
+        )
+        
+        logger.info(f"Analysis completed for session {session_id}, message {result.get('conversion_hook', {}).get('message_count', 0)}/3")
+        return result
+        
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        logger.exception("Analysis with hook failed")
+        raise HTTPException(500, f"Analysis failed: {str(e)}")

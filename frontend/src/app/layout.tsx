@@ -1,48 +1,33 @@
-import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
-import './globals.css';
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
 
-const inter = Inter({ 
-  subsets: ['latin'],
-  variable: '--font-inter',
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-jetbrains-mono',
-});
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Palmer AI - Product Intelligence Platform',
-  description: 'Transform boring product descriptions into contractor gold with AI-powered intelligence. Built for HVAC, plumbing, and industrial distributors.',
-  keywords: 'AI, B2B, product intelligence, distributors, HVAC, plumbing, contractors, Palmer AI',
+  title: 'Palmer AI - B2B Product Intelligence Platform',
+  description: 'AI-powered product descriptions for industrial distributors. Transform your catalog with Claude Sonnet 4.',
+  keywords: 'B2B, product intelligence, AI, distributors, industrial equipment',
+  authors: [{ name: 'Palmer AI' }],
+  viewport: 'width=device-width, initial-scale=1',
+  themeColor: '#8b5cf6',
   openGraph: {
-    title: 'Palmer AI - Product Intelligence Platform',
-    description: 'Transform boring product descriptions into contractor gold in minutes',
-    url: 'https://palmer-apps.com',
+    title: 'Palmer AI - B2B Product Intelligence',
+    description: 'Transform your product catalog with AI',
+    url: 'https://palmerai.com',
     siteName: 'Palmer AI',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-      },
-    ],
-    locale: 'en_US',
     type: 'website',
   },
-};
+}
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
-      <body className="font-sans antialiased bg-base text-textPrimary">
-        {children}
-      </body>
+    <html lang="en">
+      <body className={inter.className}>{children}</body>
     </html>
-  );
+  )
 }

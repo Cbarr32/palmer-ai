@@ -313,3 +313,19 @@ config/secrets/
 .ideas/secret_features/
 experiments/proprietary/
 research/unpublished/
+
+# PALMER AI CORE IP PROTECTION - CRITICAL
+private_core/
+private_modules/
+*.proprietary.py
+*_PRIVATE.*
+
+# Never expose these
+src/**/*_elite_real.py
+src/**/*_proprietary.py
+proprietary_algorithms/
+secret_prompts/
+
+# Backup of real implementations
+backups/core_ip/
+real_implementations/

@@ -1,0 +1,25 @@
+PALMER AI QUICK COLLABORATION GUIDE
+==================================
+
+TO ADD A FEATURE:
+1. Check existing patterns in src/palmer_ai/api/endpoints/
+2. Follow agent architecture in src/palmer_ai/agents/
+3. Use existing UI components in frontend/src/components/
+4. Test with: curl http://localhost:8000/[endpoint]
+
+TO DEBUG:
+1. Check logs: tail -f palmer_ai.log
+2. Check services: ps aux | grep -E "(python|node)"
+3. Check imports: python -c "from src.palmer_ai.core import PalmerAICore"
+
+TO OPTIMIZE:
+1. Check current performance metrics
+2. Look for sync operations to make async
+3. Add caching where API calls repeat
+4. Implement pagination for large datasets
+
+BUSINESS CONTEXT:
+- We're beating Klue ($30K/year) with $97/month
+- 3 messages to convert users
+- Zero integration required
+- Target: Industrial distributors
