@@ -1,0 +1,15 @@
+name: Update Status Badge
+
+on:
+  workflow_run:
+    workflows: ["Palmer AI - Complete CI/CD Pipeline"]
+    types:
+      - completed
+
+jobs:
+  update-badge:
+    runs-on: self-hosted
+    steps:
+      - name: Update README badge
+        run: |
+          echo "Badge would be updated here"

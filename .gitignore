@@ -47,3 +47,14 @@ temp/
 dist/
 build/
 *.egg-info/
+
+# GitHub Actions
+.github/workflows/local-*
+actions-runner/
+*.pid
+*.log
+
+# Build artifacts
+palmer-ai-backend.tar.gz
+palmer-ai-frontend.zip
+
