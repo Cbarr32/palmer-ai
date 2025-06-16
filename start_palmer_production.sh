@@ -1,120 +1,88 @@
 #!/bin/bash
-
-# Palmer AI Production Environment
-set -e
-
-# Colors
-BLUE='\033[0;34m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-PURPLE='\033[0;35m'
-NC='\033[0m'
-
-echo -e "${PURPLE}"
-echo "╔══════════════════════════════════════════════════════════════╗"
-echo "║              🚀 Palmer AI Production Platform                ║"
-echo "║           Enterprise B2B Intelligence System                 ║"
-echo "╚══════════════════════════════════════════════════════════════╝"
-echo -e "${NC}"
-
-echo -e "${GREEN}🎯 Production Endpoints:${NC}"
-echo -e "   Frontend:  ${BLUE}http://localhost:3000${NC}"
-echo -e "   Backend:   ${BLUE}http://localhost:8000${NC}"
-echo -e "   Metrics:   ${BLUE}http://localhost:8000/metrics${NC}"
-echo -e "   Health:    ${BLUE}http://localhost:8000/health${NC}"
+echo "🚀 PALMER AI INTELLIGENT STARTUP"
+echo "================================"
+echo "Time: $(date)"
 echo ""
 
-# Cleanup function
-cleanup() {
-    echo -e "\n${YELLOW}🛑 Shutting down Palmer AI Production...${NC}"
-    jobs -p | xargs -r kill 2>/dev/null || true
-    echo -e "${GREEN}✅ Production shutdown complete${NC}"
-    exit 0
+# Function to check if port is in use
+check_port() {
+    netstat -an | grep -q ":$1 " && return 0 || return 1
 }
-trap cleanup SIGINT SIGTERM
 
-# Environment validation
-if [[ ! -f ".env" ]]; then
-    echo -e "${YELLOW}⚠️  Creating .env from template...${NC}"
-    cp .env.example .env
-    echo -e "${YELLOW}   Please update .env with production values${NC}"
+# Function to find available port
+find_available_port() {
+    local port=$1
+    while check_port $port; do
+        echo "⚠️  Port $port is in use, trying $((port+1))..."
+        port=$((port+1))
+    done
+    echo $port
+}
+
+# Kill existing processes
+echo "🔄 Cleaning up existing processes..."
+taskkill //F //IM python.exe 2>/dev/null || true
+sleep 2
+
+# Check frontend status
+echo ""
+echo "🔍 Checking service status..."
+if check_port 3000; then
+    echo "✅ Frontend is running on port 3000"
+else
+    echo "ℹ️  Frontend not detected on port 3000"
 fi
 
-# Start production backend
-echo -e "${BLUE}🔧 Starting Palmer AI Production Backend...${NC}"
-python -m uvicorn src.palmer_ai.server_production:app --reload --host 0.0.0.0 --port 8000 > backend_production.log 2>&1 &
+# Find available port for backend
+BACKEND_PORT=$(find_available_port 8000)
+echo "✅ Backend will use port $BACKEND_PORT"
+
+# Update .env with new port if needed
+if [ $BACKEND_PORT -ne 8000 ]; then
+    echo "📝 Updating API_BASE_URL in .env..."
+    sed -i "s|API_BASE_URL=.*|API_BASE_URL=\"http://localhost:$BACKEND_PORT\"|" .env
+fi
+
+# Start backend with dynamic port
+echo ""
+echo "🚀 Starting Palmer AI Backend on port $BACKEND_PORT..."
+PORT=$BACKEND_PORT python src/palmer_ai/server_production.py &
 BACKEND_PID=$!
 
-echo -e "${YELLOW}   Initializing production services...${NC}"
-sleep 8
-
-# Verify backend health
-if kill -0 $BACKEND_PID 2>/dev/null; then
-    echo -e "${GREEN}✅ Production backend operational (PID: $BACKEND_PID)${NC}"
-    
-    # Test health endpoint
-    health_response=$(curl -s http://localhost:8000/health || echo "failed")
-    if [[ $health_response == *"healthy"* ]]; then
-        echo -e "${GREEN}✅ Health check passed${NC}"
-    else
-        echo -e "${YELLOW}⚠️  Health check inconclusive${NC}"
+# Wait for backend to start
+echo -n "Waiting for backend to start"
+for i in {1..20}; do
+    if curl -s http://localhost:$BACKEND_PORT/health > /dev/null 2>&1; then
+        echo " ✅"
+        break
     fi
+    echo -n "."
+    sleep 1
+done
+
+# Verify backend is running
+echo ""
+if curl -s http://localhost:$BACKEND_PORT/health | python -c "import sys, json; data=json.load(sys.stdin); print(f'✅ Backend Status: {data[\"status\"]}')" 2>/dev/null; then
+    echo "✅ Backend is healthy!"
+    echo ""
+    echo "🎉 PALMER AI IS READY!"
+    echo "===================="
+    echo "📊 Backend: http://localhost:$BACKEND_PORT"
+    echo "📚 API Docs: http://localhost:$BACKEND_PORT/docs"
+    echo "🎨 Frontend: http://localhost:3000 (if running)"
+    echo ""
+    echo "📝 Test the API:"
+    echo "curl -X POST http://localhost:$BACKEND_PORT/api/v1/analyze \\"
+    echo "  -H \"Content-Type: application/json\" \\"
+    echo "  -d '{\"url\": \"https://www.grainger.com\"}'"
 else
-    echo -e "${RED}❌ Production backend failed to start${NC}"
-    cat backend_production.log
+    echo "❌ Backend failed to start!"
+    echo "Check the logs above for errors."
     exit 1
 fi
 
-# Start production frontend
-echo -e "${BLUE}🎨 Starting Palmer AI Frontend...${NC}"
-cd frontend
-npm run dev -- --port 3000 > ../frontend_production.log 2>&1 &
-FRONTEND_PID=$!
-cd ..
-
-echo -e "${YELLOW}   Building production frontend...${NC}"
-sleep 10
-
+# Keep script running
 echo ""
-echo -e "${GREEN}╔══════════════════════════════════════════════════════════════╗"
-echo -e "${GREEN}║             🎉 PALMER AI PRODUCTION READY 🎉                ║"
-echo -e "${GREEN}╚══════════════════════════════════════════════════════════════╝${NC}"
-echo ""
-echo -e "${BLUE}🚀 Production Features Active:${NC}"
-echo -e "   • Enterprise security and validation"
-echo -e "   • Circuit breaker and retry patterns"
-echo -e "   • Comprehensive metrics collection"
-echo -e "   • Production error handling"
-echo -e "   • Real-time health monitoring"
-echo ""
-echo -e "${PURPLE}📊 Monitoring:${NC}"
-echo -e "   • Metrics: curl http://localhost:8000/metrics"
-echo -e "   • Health: curl http://localhost:8000/health"
-echo -e "   • Logs: tail -f backend_production.log"
-echo ""
-echo -e "${YELLOW}Press Ctrl+C to stop all production services${NC}"
-
-# Keep running with health monitoring
-while true; do
-    sleep 30
-    
-    # Check backend health
-    if ! kill -0 $BACKEND_PID 2>/dev/null; then
-        echo -e "${RED}❌ Production backend died${NC}"
-        break
-    fi
-    
-    # Check frontend health
-    if ! kill -0 $FRONTEND_PID 2>/dev/null; then
-        echo -e "${RED}❌ Frontend process died${NC}"
-        break
-    fi
-    
-    # Optional: Check endpoint health
-    health_check=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/health 2>/dev/null || echo "000")
-    if [[ $health_check != "200" ]]; then
-        echo -e "${YELLOW}⚠️  Health check warning: HTTP $health_check${NC}"
-    fi
-done
-
-cleanup
+echo "Press Ctrl+C to stop the server..."
+trap "kill $BACKEND_PID 2>/dev/null; exit" INT
+wait $BACKEND_PID
