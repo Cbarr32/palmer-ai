@@ -1,0 +1,25 @@
+name: Quick Test
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/quick-test.yml'
+
+jobs:
+  test:
+    runs-on: self-hosted
+    steps:
+      - name: 👋 Hello from Palmer AI Runner
+        run: |
+          echo "🚀 Palmer AI Runner Test"
+          echo "========================"
+          echo "Time: $(date)"
+          echo "Runner: ${{ runner.name }}"
+          echo "OS: ${{ runner.os }}"
+          echo ""
+          echo "Python: $(python --version)"
+          echo "Node: $(node --version)"
+          echo "Git: $(git --version)"
+          echo ""
+          echo "✅ Runner is operational!"
