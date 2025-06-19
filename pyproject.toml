@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "palmer-ai"
+version = "0.1.0"
+description = "Stream Consciousness Intelligence System"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+numpy = "^1.24.0"
+asyncio = "^3.4.3"
+pytest = "^7.0.0"
+pytest-asyncio = "^0.21.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
