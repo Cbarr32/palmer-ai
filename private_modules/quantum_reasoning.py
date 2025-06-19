@@ -4,7 +4,7 @@ Quantum Reasoning Module
 Maintains superposition of solution pathways
 """
 import asyncio
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Any  # <-- The missing ontological declaration
 
 class QuantumState:
     """Represents a quantum reasoning state"""
