@@ -1,0 +1,103 @@
+"""Palmer AI B2B Configuration Management - Claude Sonnet 4 Powered"""
+from pydantic_settings import BaseSettings
+from pydantic import Field, ConfigDict
+from typing import List, Dict, Optional
+import os
+
+class Settings(BaseSettings):
+    """Configuration settings for Palmer AI B2B Platform powered by Claude Sonnet 4"""
+    
+    model_config = ConfigDict(
+        env_file=".env",
+        case_sensitive=False,
+        extra="allow"
+    )
+    
+    # Core Configuration
+    app_name: str = "Palmer AI B2B Intelligence Platform"
+    app_version: str = "2.0.0-B2B-Sonnet4" 
+    debug: bool = True
+    environment: str = "development"
+    log_level: str = "INFO"
+    log_format: str = "json"
+    
+    # API Configuration
+    api_v1_prefix: str = "/api/v1"
+    cors_origins: List[str] = ["*"]
+    
+    # Claude Sonnet 4 Configuration (Primary AI Engine)
+    anthropic_api_key: str = Field(default="", env="ANTHROPIC_API_KEY")
+    anthropic_model: str = "claude-sonnet-4-20250514"
+    anthropic_max_tokens: int = 8192
+    claude_sonnet_4_mode: bool = True
+    
+    # OpenAI Configuration (Optional for future dual-AI)
+    openai_api_key: str = Field(default="", env="OPENAI_API_KEY")
+    openai_model: str = "gpt-4-turbo-preview"
+    openai_enabled: bool = False
+    
+    # B2B Platform Configuration
+    b2b_mode: bool = True
+    enable_distributor_features: bool = True
+    max_concurrent_extractions: int = 5
+    extraction_rate_limit: float = 1.5
+    max_products_per_extraction: int = 2000
+    
+    # Sonnet 4 Enhanced Capabilities
+    enable_advanced_reasoning: bool = True
+    enable_multimodal_analysis: bool = True
+    enable_complex_extraction: bool = True
+    
+    # Subscription Tiers (Enhanced with Sonnet 4)
+    subscription_tiers: Dict[str, Dict[str, int]] = {
+        "starter": {
+            "monthly_price": 497,
+            "product_limit": 2000,
+            "manufacturer_limit": 2,
+            "api_calls_limit": 2000
+        },
+        "professional": {
+            "monthly_price": 1497,
+            "product_limit": 15000,
+            "manufacturer_limit": 10,
+            "api_calls_limit": 15000
+        },
+        "enterprise": {
+            "monthly_price": 4997,
+            "product_limit": -1,
+            "manufacturer_limit": -1,
+            "api_calls_limit": -1
+        }
+    }
+    
+    # Target Industries (From $7.6T research)
+    target_industries: Dict[str, Dict[str, str]] = {
+        "automotive": {
+            "naics": "4211",
+            "focus": "Parts catalogs, dealer portals, inventory management",
+            "market_size": "$800B"
+        },
+        "construction": {
+            "naics": "4213", 
+            "focus": "Building materials, tools, project management",
+            "market_size": "$1.2T"
+        },
+        "industrial_equipment": {
+            "naics": "4238",
+            "focus": "Machinery, tools, maintenance supplies",
+            "market_size": "$900B"
+        },
+        "electronics": {
+            "naics": "4236",
+            "focus": "Components, devices, technical specifications",
+            "market_size": "$600B"
+        },
+        "food_beverage": {
+            "naics": "4244",
+            "focus": "Grocery, restaurant supplies, compliance tracking",
+            "market_size": "$1.5T"
+        }
+    }
+
+# Create global settings instance
+settings = Settings()

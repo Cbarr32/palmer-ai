@@ -1,0 +1,16 @@
+PALMER AI PROJECT ANALYSIS
+Generated: $(date)
+
+TECH STACK DETECTED:
+- Backend: Python + FastAPI
+- Frontend: Next.js + TypeScript  
+- Database: [Check for PostgreSQL/SQLite]
+- AI: Anthropic Claude
+
+KEY FINDINGS:
+$(find . -name "*.py" | wc -l) Python files
+$(find . -name "*.tsx" | wc -l) TypeScript files
+$(grep -r "router\." src --include="*.py" | wc -l) API endpoints
+
+RECOMMENDATIONS:
+[To be filled based on analysis]

@@ -1,0 +1,13 @@
+# Palmer AI Core IP Configuration
+# THIS DIRECTORY CONTAINS PROPRIETARY ALGORITHMS
+# NEVER COMMIT TO PUBLIC REPOSITORIES
+
+PROTECTED_MODULES = [
+    "elite_prompting_system",
+    "mpb_scoring_algorithm", 
+    "b2b_optimization_engine",
+    "revenue_maximization",
+    "competitive_intelligence"
+]
+
+# These are your competitive advantages!

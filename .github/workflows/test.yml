@@ -1,0 +1,18 @@
+name: Quick Test
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ develop ]
+
+jobs:
+  quick-test:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - name: 🧪 Run quick test
+        run: |
+          echo "Testing Palmer AI setup..."
+          python --version
+          node --version
+          echo "✅ Environment verified!"

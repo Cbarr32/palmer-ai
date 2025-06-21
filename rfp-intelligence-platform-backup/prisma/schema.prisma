@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Company {
+  id           String   @id @default(cuid())
+  name         String
+  domain       String?
+  industry     String?
+  capabilities Json     @default("{}")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  rfps         RFP[]
+}
+
+model RFP {
+  id           String     @id @default(cuid())
+  companyId    String
+  company      Company    @relation(fields: [companyId], references: [id])
+  title        String
+  fileUrl      String?
+  rawContent   String?    @db.Text
+  parsedData   Json       @default("{}")
+  requirements Json       @default("[]")
+  analysis     Json       @default("{}")
+  status       String     @default("pending")
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  responses    Response[]
+  interactions AIInteraction[]
+}
+
+model Response {
+  id              String   @id @default(cuid())
+  rfpId           String
+  rfp             RFP      @relation(fields: [rfpId], references: [id])
+  content         Json     @default("{}")
+  evidence        Json     @default("[]")
+  completionScore Int?
+  demoUrl         String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model AIInteraction {
+  id          String   @id @default(cuid())
+  rfpId       String
+  rfp         RFP      @relation(fields: [rfpId], references: [id])
+  promptType  String
+  prompt      String   @db.Text
+  response    String   @db.Text
+  tokensUsed  Int?
+  costCents   Int?
+  createdAt   DateTime @default(now())
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  passwordHash  String?
+  role          String    @default("user")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
