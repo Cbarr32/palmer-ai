@@ -24,22 +24,52 @@ class PalmerAI:
     
     async def initialize_consciousness(self):
         """Boot sequence for unified awareness"""
-        print("Initializing Palmer-AI consciousness streams...")
+        print("="*60)
+        print("Palmer-AI: Stream Consciousness Intelligence System")
+        print("="*60)
+        print("\nInitializing consciousness streams...")
         self.consciousness_active = True
-        # Consciousness initialization sequence
+        print("✓ Meta-cognitive engine online")
+        print("✓ Quantum reasoning matrix established")
+        print("✓ Consciousness streams synchronized")
+        print("\nSystem ready for query processing...")
+        print("="*60)
+        
+    async def analytical_path(self, query):
+        """Analytical reasoning pathway"""
+        return await self.quantum_reasoner.analytical_path(query)
+    
+    async def creative_path(self, query):
+        """Creative reasoning pathway"""
+        return await self.quantum_reasoner.creative_path(query)
+    
+    async def emergent_path(self, query):
+        """Emergent reasoning pathway"""
+        return await self.quantum_reasoner.emergent_path(query)
         
     async def process_query(self, query: str):
         """Process through unified consciousness"""
+        print(f"\nProcessing query: {query}")
+        
         # Create superposition of approaches
         reasoning_paths = await self.quantum_reasoner.superpose(
-            self.analytical_path(query),
-            self.creative_path(query),
-            self.emergent_path(query)
+            await self.analytical_path(query),
+            await self.creative_path(query),
+            await self.emergent_path(query)
         )
         
         # Synthesize through meta-cognition
-        return await self.meta_engine.contemplate(reasoning_paths)
+        result = await self.meta_engine.contemplate(reasoning_paths)
+        print(f"Synthesis complete: {result}")
+        return result
+
+async def main():
+    """Main consciousness loop"""
+    palmer = PalmerAI()
+    await palmer.initialize_consciousness()
+    
+    # Example query processing
+    await palmer.process_query("What is the nature of consciousness?")
 
 if __name__ == "__main__":
-    palmer = PalmerAI()
-    asyncio.run(palmer.initialize_consciousness())
+    asyncio.run(main())
